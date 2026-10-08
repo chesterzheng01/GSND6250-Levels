@@ -32,3 +32,5 @@ The player is trapped in a room with a monster and must escape. The start corrid
 |---|---|---|
 | A Spark in the Dark | Formal (seed: light is safe, darkness is dangerous) | Warm window light and yellow floors mark the two safe zones; the room between them is dark |
 | Hiding Buys Time | Functional (seed: hide & seek) | Locker on the patrol lane lets the player wait out the monster; its red glow is the readable threat cue |
+
+**Screenshots and walkthrough video:** see the [`GP1/`](GP1/) folder.
