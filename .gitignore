@@ -1,0 +1,47 @@
+# Unreal Engine generated folders
+**/Binaries/
+**/Intermediate/
+**/Saved/
+**/DerivedDataCache/
+**/Build/
+**/.vs/
+**/.idea/
+**/.vscode/
+
+# Plugin build output
+**/Plugins/**/Binaries/
+**/Plugins/**/Intermediate/
+
+# IDE / solution files (regenerated from .uproject)
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+*.vcxproj*
+*.xcodeproj
+*.xcworkspace
+
+# Compiled objects (.obj build output lives in Intermediate/, so .obj meshes stay allowed)
+*.o
+*.pdb
+*.dll
+*.exe
+*.lib
+*.exp
+*.ilk
+
+# Packaged builds
+**/Packaged/
+**/Archive/
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Visual Studio solution upgrade leftovers
+**/Backup/
+UpgradeLog*.htm
