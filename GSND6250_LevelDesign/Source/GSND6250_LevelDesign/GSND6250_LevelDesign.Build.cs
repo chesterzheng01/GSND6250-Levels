@@ -37,7 +37,8 @@ public class GSND6250_LevelDesign : ModuleRules
 			"GSND6250_LevelDesign/Variant_SideScrolling/AI",
 			"GSND6250_LevelDesign/Variant_SideScrolling/Gameplay",
 			"GSND6250_LevelDesign/Variant_SideScrolling/Interfaces",
-			"GSND6250_LevelDesign/Variant_SideScrolling/UI"
+			"GSND6250_LevelDesign/Variant_SideScrolling/UI",
+			"GSND6250_LevelDesign/GP3_BossWeakPoint"
 		});
 
 		// Uncomment if you are using Slate UI
