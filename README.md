@@ -8,18 +8,50 @@ Level design projects for GSND 6250, Northeastern University (Prof. Larissa Erin
 ## Layout
 
 ```
-GSND6250_LevelDesign/         Unreal project (one project for the whole semester)
-  Source/                     C++ gameplay code
-  Content/GP1_LightHide/      Group Project 1 map and materials
-  Content/GP2_MonsterHear/    Group Project 2
-  Content/GP3_BossWeakPoint/  Group Project 3 (C++ in Source/GSND6250_LevelDesign/GP3_BossWeakPoint/)
+GSND6250_LevelDesign/                   Unreal project (one project for the whole semester)
+  Source/GSND6250_LevelDesign/          C++ (template base classes at the top level)
+    GPn_<Name>/                         C++ for one group project, classes prefixed GPn (e.g. AGP3Boss)
+  Content/
+    GPn_<Name>/                         Everything made or imported for one group project
+      Maps/  Blueprints/  Materials/  Textures/  Meshes/  Audio/  Input/
+      Import/                           Third-party downloads, kept with their original names
+    Characters/ Input/ LevelPrototyping/ ThirdPerson/   UE template, shared by all projects
+    Materials_Frabric/                  Fabric pack used by GP2 (folder name is misspelled; don't rename)
+    Variant_*/                          UE template sample levels, not used by any project
+GP1/                                    Screenshots and video linked from this README
 ```
+
+Current projects: `GP1_LightHide`, `GP2_MonsterHear`, `GP3_BossWeakPoint` (C++ in `Source/GSND6250_LevelDesign/GP3_BossWeakPoint/`), `GP4_TragicHeroism`.
+
+What does not go in the repo: `Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/`, `Content/Developers/`, packaged builds, course PDFs and write-ups.
+
+Don't edit template assets in place. Duplicate them into your `GPn_` folder first, so one project's change can't break another (GP2 does this with its own character).
+
+## Conventions
+
+**Assets.** `Prefix_GPn_Name`, e.g. `BP_GP3_Boss`, `MI_GP3_Wall`, `L_GP4_TragicHeroism`.
+
+| Prefix | Type | Prefix | Type |
+|---|---|---|---|
+| `L_` | Level | `T_` | Texture |
+| `BP_` | Blueprint | `SM_` / `SK_` | Static / Skeletal mesh |
+| `M_` / `MI_` | Material / instance | `S_` | Sound |
+| `IA_` / `IMC_` | Input action / mapping context | `WBP_` | Widget |
+
+Third-party files can keep their source names, but only inside `Import/`. Rename or move assets in the editor (never in Explorer), then right-click the folder → **Fix Up Redirectors** before committing.
+
+**Shared assets.** If your project needs to change something another project uses (a GameMode, character, input mapping), duplicate it into your folder instead.
+
+**Commits.** Short imperative English, with the project when it applies: `GP4: Add magma floor material`, `Fix navmesh in GP2`. One topic per commit.
+
+**Branches.** Small changes can go straight to `main`. Use a branch for anything that touches shared assets or many files: `gpN/<topic>` or `<yourname>/<topic>`. Pull before you start working, and push before you stop.
 
 ## Getting started
 
 1. Install [Git LFS](https://git-lfs.com) and run `git lfs install` once. Maps and assets (`.umap`, `.uasset`) are stored with LFS; without it they download as small pointer files that Unreal cannot open.
 2. Clone the repo and open `GSND6250_LevelDesign/GSND6250_LevelDesign.uproject` with **Unreal Engine 5.8**. The first launch compiles the C++ module (Visual Studio 2022 with the "Game development with C++" workload is required).
 3. Open the project's map from the Content Browser (see the table below) and press Play.
+4. Install the pre-commit check once (blocks generated folders and assets that skip LFS): `cp .githooks/pre-commit .git/hooks/`. Don't set `core.hooksPath`; it would turn off the Git LFS hooks already in `.git/hooks/`.
 
 ## Upgrading from UE 5.6 to 5.8
 

@@ -1,0 +1,23 @@
+#!/bin/sh
+# Block generated folders, and binaries/large files that bypass Git LFS.
+# Install: cp .githooks/pre-commit .git/hooks/   (don't use core.hooksPath; it disables the LFS hooks)
+fail=0
+git diff --cached --name-only --diff-filter=AM > "${TMPDIR:-/tmp}/precommit_files.$$"
+while IFS= read -r f; do
+  case "$f" in
+    */Binaries/*|*/Intermediate/*|*/Saved/*|*/DerivedDataCache/*|*/Content/Developers/*)
+      echo "pre-commit: generated/per-user file staged: $f"; fail=1; continue;;
+  esac
+  lfs=$(git check-attr filter -- "$f" | awk '{print $NF}')
+  case "$f" in
+    *.uasset|*.umap)
+      [ "$lfs" = "lfs" ] || { echo "pre-commit: not tracked by LFS: $f"; fail=1; };;
+  esac
+  if [ "$lfs" != "lfs" ]; then
+    size=$(git cat-file -s ":$f" 2>/dev/null || echo 0)
+    [ "$size" -gt 5242880 ] && { echo "pre-commit: >5 MB and not in LFS: $f"; fail=1; }
+  fi
+done < "${TMPDIR:-/tmp}/precommit_files.$$"
+rm -f "${TMPDIR:-/tmp}/precommit_files.$$"
+[ $fail -eq 0 ] || echo "Fix the files above, or bypass once with: git commit --no-verify"
+exit $fail
