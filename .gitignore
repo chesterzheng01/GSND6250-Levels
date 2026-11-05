@@ -55,3 +55,7 @@ UpgradeLog*.htm
 # Editor logs and crash dumps outside Saved/
 *.log
 *.dmp
+
+# Python bytecode (editor Python in Content/Python)
+__pycache__/
+*.pyc

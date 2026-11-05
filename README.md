@@ -15,13 +15,16 @@ GSND6250_LevelDesign/                   Unreal project (one project for the whol
     GPn_<Name>/                         Everything made or imported for one group project
       Maps/  Blueprints/  Materials/  Textures/  Meshes/  Audio/  Input/
       Import/                           Third-party downloads, kept with their original names
+      Props/                            Third-party props imported with GP Tools (original names too)
     Characters/ Input/ LevelPrototyping/ ThirdPerson/   UE template, shared by all projects
     Materials_Frabric/                  Fabric pack used by GP2 (folder name is misspelled; don't rename)
     Variant_*/                          UE template sample levels, not used by any project
 GP1/                                    Screenshots and video linked from this README
 ```
 
-Current projects: `GP1_LightHide`, `GP2_MonsterHear`, `GP3_BossWeakPoint` (C++ in `Source/GSND6250_LevelDesign/GP3_BossWeakPoint/`), `GP4_TragicHeroism`.
+Current projects: `GP1_LightHide`, `GP2_MonsterHear`, `GP3_BossWeakPoint` (C++ in `Source/GSND6250_LevelDesign/GP3_BossWeakPoint/`), `GP4_TragicHeroism`, `GP5_FromTheShadows`.
+
+Shared editor tools: `Content/Python/` (the **GP Tools** menu, see [Importing props](#importing-props-gp-tools)) and its import settings in `Content/Tools/PropImport/`.
 
 What does not go in the repo: `Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/`, `Content/Developers/`, packaged builds, course PDFs and write-ups.
 
@@ -38,7 +41,7 @@ Don't edit template assets in place. Duplicate them into your `GPn_` folder firs
 | `M_` / `MI_` | Material / instance | `S_` | Sound |
 | `IA_` / `IMC_` | Input action / mapping context | `WBP_` | Widget |
 
-Third-party files can keep their source names, but only inside `Import/`. Rename or move assets in the editor (never in Explorer), then right-click the folder → **Fix Up Redirectors** before committing.
+Third-party files can keep their source names, but only inside `Import/` (or `Props/`, where GP Tools imports to). Rename or move assets in the editor (never in Explorer), then right-click the folder → **Fix Up Redirectors** before committing.
 
 **Shared assets.** If your project needs to change something another project uses (a GameMode, character, input mapping), duplicate it into your folder instead.
 
@@ -52,6 +55,26 @@ Third-party files can keep their source names, but only inside `Import/`. Rename
 2. Clone the repo and open `GSND6250_LevelDesign/GSND6250_LevelDesign.uproject` with **Unreal Engine 5.8**. The first launch compiles the C++ module (Visual Studio 2022 with the "Game development with C++" workload is required).
 3. Open the project's map from the Content Browser (see the table below) and press Play.
 4. Install the pre-commit check once (blocks generated folders and assets that skip LFS): `cp .githooks/pre-commit .git/hooks/`. Don't set `core.hooksPath`; it would turn off the Git LFS hooks already in `.git/hooks/`.
+
+## Importing props (GP Tools)
+
+`Content/Python/init_unreal.py` adds a **GP Tools** menu to the editor's main menu bar when the project opens. It batch-imports downloaded low-poly props so you don't import them one by one.
+
+1. Put the downloads in `Downloads/props_inbox/` (**GP Tools → Open Props Inbox** opens it): `.glb`, `.gltf` or `.obj` files, a `.zip`, or a folder of them.
+2. In the Content Browser, open the folder to import into, e.g. your `GPn_<Name>` folder.
+3. **GP Tools → Import Props from Inbox**.
+   - A loose file goes to `Props/<file name>/`; a zip or folder is a pack and goes to `Props/<pack name>/`.
+   - Packs open a tick-box list first (with search). Your own folders start all ticked, big zips (over 10 models) start unticked. The choice is remembered in `props_inbox/_picks/`.
+   - Models already in the target folder are not offered again and are never overwritten, so you can pick from a big pack in several rounds.
+4. When it finishes, a dialog lists what was imported. Finished sources move to `props_inbox/_imported/<date>/`, and `last_report.json` there lists each mesh's size, pivot height and materials.
+
+What it does per file:
+
+- glTF coloured per vertex, with no textures (e.g. threejsassets): the file's own material is not imported; the mesh gets `Props/Materials/M_GLB_VertexColor`.
+- Other glTF and OBJ (+ `.mtl`): materials and textures are imported as usual.
+- A model shipped in several formats is imported once (glb > gltf > obj; fbx is skipped). Each file becomes one Static Mesh.
+
+Check sizes after importing: free models come in at any scale (a soda can 10 m tall) and with pivots anywhere. The import settings are copies of the engine pipelines in `Content/Tools/PropImport/`. Record where each download came from and its license (some need credit, some may not be redistributed).
 
 ## Upgrading from UE 5.6 to 5.8
 
